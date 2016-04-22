@@ -1,0 +1,141 @@
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js" type="text/javascript"></script>
+
+<style>
+body { margin:0px; background:#000; color:#CCC; }
+div#pagetop { position:fixed; background: #333; padding:20px; font-size:36px; width:100%; border-bottom:#000 1px solid; }
+div#thumbnailbox { float:left; margin-top:82px; width:120px; background:#292929; }
+div#thumbnailbox > div { width:100px; height:80px; overflow:hidden; margin:10px; cursor:pointer; }
+div#thumbnailbox > div > img { width:100px; }
+div#pictureframe > img {max-width:100%;
+max-height:100%; position:fixed; top: 100px; width:700px; height:450px;}
+div#albummenubox { position: fixed; left: 856px; top: 100px; width: 400px; background: black; padding: 12px; color: whitesmoke; border-radius: 10px; border-style: ridge; }
+div#detailbox {left:125px; top: 575px; width: 671px; background: #CCC; padding: 12px; color: #000; border-radius: 10px; position: fixed; }
+div#importantbox{position: fixed; left: 856px; top: 350px; width: 400px; background: black; padding: 12px; color: whitesmoke; border-radius: 10px; border-style: ridge; }
+div#keyfeature{position: fixed; left: 856px; top: 550px; width: 400px; background: black; padding: 12px; color: whitesmoke; border-radius: 10px; border-style: ridge; column-count: 3;}
+div#phone{ position:fixed; background: #333; font-size:36px; width:100%; left:550px; top:33px;}
+div#dealer{ position:fixed; background: #333; font-size:36px; width:100%; left:900px; top:33px;}
+
+
+</style>
+
+
+<p id="demo"></p>
+<script>
+function ajax_json_data(){
+    //document.getElementById("pagetop").innerHTML = "Top rating cars this week";
+    var thumbnailbox = document.getElementById("thumbnailbox");
+    var pictureframe = document.getElementById("pictureframe");
+    var albummenubox = document.getElementById("albummenubox");
+    var hr = new XMLHttpRequest();
+    hr.open("POST", "topratingdataforanony.php", true);
+    hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    hr.send("limit=20");
+    hr.onreadystatechange = function() {
+        if(hr.readyState == 4 && hr.status == 200) {
+            var d = JSON.parse(hr.responseText);
+            //arbitrarybox.innerHTML = d.arbitrary.returntime;
+            albummenubox.innerHTML = "";
+            var counter = 0  
+            thumbnailbox.innerHTML = "";
+            for(var o in d){
+                counter += 1;
+                if(d[o].vin){
+                    if (counter == 1){pictureframe.innerHTML = '<img src= '+d[o].photoUrlsSmall.replace(/results/,"supersized")+' />';}
+
+            if(d[o].photoUrlsSmall){
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //Actually, we can use jquery to do the job in one line and it will avoid parsing html and javascript and get the same result. 
+            //But we just try to use original javascript to do this job here because at the very beginning, we don't know the magic of jquery.
+            //I don't edit the below line because I hope I can remember the painful work I did without jquery and don't forget to use it anymore.
+            
+            thumbnailbox.innerHTML += '<div onclick="putinframe(\''+d[o].carid+'\',\''+d[o].photoUrlsSmall.replace(/results/,"supersized")+'\',\''+d[o].makeName+'\',\''+d[o].modelName+'\',\''+d[o].makeYear+'\',\''+d[o].drivetrain+'\',\''+d[o].transmission+'\',\''+d[o].exteriorColor+'\',\''+d[o].engineDescription+'\',\''+d[o].price+'\',\''+d[o].zipcode+'\',\''+d[o].miles+'\',\''+d[o].phoneNumber+'\',\''+d[o].vin+'\',\''+d[o].dealer.replace(/'/g, "\\\'")+'\',\''+d[o].note.replace(/'/g, "\\\'")+'\',\''+d[o].feature.replace(/"/g, " ").replace(/,/g, "\t")+'\')"><img src="'+d[o].photoUrlsSmall+'"></div>';
+            }
+                }
+            }
+        }
+    }
+}
+function putinframe(src0,src1,src2,src3,src4,src5,src6,src7,src8,src9,zipcode,miles,phone,vin,dealer,note,feat){
+
+    var pictureframe = document.getElementById("pictureframe");
+    var albummenubox = document.getElementById("albummenubox");
+    var tdzipcode = document.getElementById("tdavaliable");
+    var tdmiles = document.getElementById("tdmileage");
+    var tdvin = document.getElementById("tdvin");
+    var tdprice = document.getElementById("tdprice");
+    var tdphone = document.getElementById("phone");
+    var tddealer = document.getElementById("dealer");
+    var tdnote = document.getElementById("detail");
+    var tdfeat = document.getElementById("feature");
+    tdfeat.innerHTML = feat;
+    tdnote.innerHTML = note;
+    tddealer.innerHTML=dealer;
+    tdphone.innerHTML= phone;
+    tdprice.innerHTML =src9;
+    tdvin.innerHTML = vin;
+    tdmiles.innerHTML= miles;
+    tdzipcode.innerHTML = zipcode;
+    albummenubox.innerHTML = "";
+    pictureframe.innerHTML = '<img src="'+src1+'">';
+    albummenubox.innerHTML += 'Make: '+src2+'</a><br>';       
+        albummenubox.innerHTML += 'Model: '+src3+'<br>';
+        albummenubox.innerHTML += 'Year: '+src4+'<br>';
+        albummenubox.innerHTML += 'Drivetrain: '+src5+'<br>';
+        albummenubox.innerHTML += 'Transmission: '+src6+'<br>';
+        albummenubox.innerHTML += 'Exterior Color: '+src7+'<br>';
+        albummenubox.innerHTML += 'Engine Description: '+src8+'<br>';
+        // albummenubox.innerHTML += 'Price: '+src9+'';
+
+
+
+}
+
+</script>
+</head>
+<body>
+
+<div id="pagetop">Top rating cars</div>
+<div id="phone"><font size="5" color="yellow">phone</font></div>
+<div id="dealer"><font size="5" color="yellow">dealer</font></div>
+
+<div id="thumbnailbox"></div>
+<div id="pictureframe"></div>
+<div id="albummenubox"></div>
+<div id="detailbox">
+<h3>Seller Comment</h3>
+<p id="detail"></p></div>
+<script>ajax_json_data();</script><div id="importantbox">
+    <table style="width:100%">
+  <tbody><tr>
+    <td>Price:</td>
+    <td id="tdprice">50</td>
+    </tr>
+    <tr>
+    <td>Avaliable at:</td>
+    <td id="tdavaliable"></td>
+    </tr>
+    <tr>
+    <td>Mileage:</td>
+    <td id="tdmileage"></td>
+    </tr>
+     <tr>
+    <td>VIN#: </td>
+    <td id="tdvin"></td>
+    </tr>
+    
+    
+  
+</tbody></table>
+</div>
+
+<div id="keyfeature">
+<h3 align="center">Key Features</h3>
+<p id="feature"></p>
+</div>
+
+
+<script>ajax_json_data();</script>
+
+</body></html>

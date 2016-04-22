@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <style type="text/css">
+    .inputarea{
+        width: 250px;
+        clear: both;
+    }
+    .inputarea input {
+        width: 100%;
+        clear: both;
+    }
+    .back input{
+        width: 250px;
+        clear: both;
+    }
+    </style>
+<body>
+
+<h1>Car Information</h1>
+
+<p>Fill out the following for your vehicle information.</p>
+<div class="inputarea">
+<form method="post" action="http://uoficarstore.web.engr.illinois.edu/post_car.php">
+Identity: <input type="text" name="identity" required><br>
+netid: <input type="text" name="sellerName" required><br>
+Make: <input type="text" name="makeName" required><br>
+Model: <input type="text" name="modelName" required><br>
+VIN: <input type="number" name="vin" required><br>
+Mileage:<input type="number" name="mile" required ><br>
+Year:<input type="number" name="year" required><br>
+Exterior Color:<input type="text" name="extc" required><br>
+Drive-Train:<input type="text" name="drivetrain" required><br>
+Transimission:<input type="text" name="trans" required><br>
+Price:<input type="text" name="price" required><br>
+Image URL:<input type="text" name="Image URL"><br>
+
+
+  <input type="submit" value="Submit">
+
+</form>
+</div>
+<div class="back">
+<form action="http://uoficarstore.web.engr.illinois.edu/temp_update_sign_in.php" method="get">
+    <input type="submit" value="back to homepage" 
+         name="Submit" id="frm1_submit" />
+</form>
+</div>
+</body>
+</html>
